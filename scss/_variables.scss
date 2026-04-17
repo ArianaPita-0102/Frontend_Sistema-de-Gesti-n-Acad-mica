@@ -1,0 +1,92 @@
+// ============================================================
+// _variables.scss — Design tokens del sistema
+// ============================================================
+
+// --- Paleta principal (modo claro) ---
+$color-bg:            #F5F4F0;
+$color-surface:       #FFFFFF;
+$color-surface-alt:   #EDECEA;
+$color-border:        #D8D6D1;
+$color-border-light:  #EDECEA;
+
+$color-text-primary:  #1A1916;
+$color-text-secondary:#6B6860;
+$color-text-muted:    #9E9B95;
+
+$color-accent:        #2D6A4F;   // verde institucional
+$color-accent-light:  #52B788;
+$color-accent-pale:   #D8F3DC;
+
+$color-danger:        #C0392B;
+$color-danger-pale:   #FDECEA;
+$color-warning:       #D4811A;
+$color-warning-pale:  #FEF3E2;
+$color-success:       #1E7E34;
+$color-success-pale:  #D6F5DD;
+$color-info:          #1A5276;
+$color-info-pale:     #D6EAF8;
+
+// --- Paleta modo oscuro ---
+$dark-bg:             #0F1010;
+$dark-surface:        #1A1C1B;
+$dark-surface-alt:    #232624;
+$dark-border:         #2E3230;
+$dark-text-primary:   #E8E6E1;
+$dark-text-secondary: #9B9990;
+$dark-accent:         #52B788;
+$dark-accent-light:   #74C69D;
+
+// --- Tipografía ---
+$font-display:  'Playfair Display', Georgia, serif;
+$font-body:     'DM Sans', 'Segoe UI', sans-serif;
+$font-mono:     'JetBrains Mono', 'Courier New', monospace;
+
+$font-size-xs:   0.75rem;
+$font-size-sm:   0.875rem;
+$font-size-base: 1rem;
+$font-size-md:   1.125rem;
+$font-size-lg:   1.25rem;
+$font-size-xl:   1.5rem;
+$font-size-2xl:  2rem;
+$font-size-3xl:  2.5rem;
+
+$font-weight-normal:   400;
+$font-weight-medium:   500;
+$font-weight-semibold: 600;
+$font-weight-bold:     700;
+
+// --- Espaciado ---
+$space-1:  0.25rem;
+$space-2:  0.5rem;
+$space-3:  0.75rem;
+$space-4:  1rem;
+$space-5:  1.25rem;
+$space-6:  1.5rem;
+$space-8:  2rem;
+$space-10: 2.5rem;
+$space-12: 3rem;
+$space-16: 4rem;
+
+// --- Bordes y radios ---
+$radius-sm:   4px;
+$radius-md:   8px;
+$radius-lg:   12px;
+$radius-xl:   16px;
+$radius-full: 9999px;
+
+// --- Sombras ---
+$shadow-xs:  0 1px 2px rgba(0,0,0,.05);
+$shadow-sm:  0 1px 4px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
+$shadow-md:  0 4px 12px rgba(0,0,0,.10), 0 1px 3px rgba(0,0,0,.06);
+$shadow-lg:  0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.07);
+$shadow-xl:  0 16px 40px rgba(0,0,0,.14);
+
+// --- Transiciones ---
+$transition-fast:   150ms ease;
+$transition-base:   250ms ease;
+$transition-slow:   400ms ease;
+
+// --- Layout ---
+$sidebar-width:     240px;
+$topbar-height:     60px;
+$container-max:     1280px;

@@ -1,0 +1,138 @@
+// ============================================================
+// styles.scss — Entrada principal de estilos
+// Importa todos los parciales en orden correcto
+// ============================================================
+@use 'variables' as v;
+@use 'mixins' as m;
+@use 'components';
+
+// ---- Reset y base ----
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: v.$font-body;
+  font-size: v.$font-size-base;
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--text-primary);
+  transition: background v.$transition-base, color v.$transition-base;
+  min-height: 100vh;
+  @include m.custom-scrollbar;
+}
+
+// ---- Variables CSS (modo claro) ----
+:root {
+  --bg:            #{v.$color-bg};
+  --surface:       #{v.$color-surface};
+  --surface-alt:   #{v.$color-surface-alt};
+  --border:        #{v.$color-border};
+  --border-light:  #{v.$color-border-light};
+  --text-primary:  #{v.$color-text-primary};
+  --text-secondary:#{v.$color-text-secondary};
+  --text-muted:    #{v.$color-text-muted};
+  --accent:        #{v.$color-accent};
+  --accent-light:  #{v.$color-accent-light};
+  --accent-pale:   #{v.$color-accent-pale};
+  --danger:        #{v.$color-danger};
+  --warning:       #{v.$color-warning};
+  --success:       #{v.$color-success};
+  --font-display:  #{v.$font-display};
+  --font-body:     #{v.$font-body};
+  --font-mono:     #{v.$font-mono};
+}
+
+// ---- Variables CSS (modo oscuro) ----
+.dark-mode {
+  --bg:            #{v.$dark-bg};
+  --surface:       #{v.$dark-surface};
+  --surface-alt:   #{v.$dark-surface-alt};
+  --border:        #{v.$dark-border};
+  --border-light:  #{v.$dark-border};
+  --text-primary:  #{v.$dark-text-primary};
+  --text-secondary:#{v.$dark-text-secondary};
+  --text-muted:    #6B6B60;
+  --accent:        #{v.$dark-accent};
+  --accent-light:  #{v.$dark-accent-light};
+  --accent-pale:   rgba(82, 183, 136, 0.15);
+}
+
+// ---- Layout principal ----
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - #{v.$topbar-height});
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: v.$space-6;
+  @include m.custom-scrollbar;
+
+  @include m.mobile { padding: v.$space-4; }
+}
+
+// ---- Sidebar responsive ----
+@include m.tablet {
+  .sidebar {
+    position: fixed;
+    left: -#{v.$sidebar-width};
+    top: v.$topbar-height;
+    height: calc(100vh - #{v.$topbar-height});
+    z-index: 200;
+    transition: left v.$transition-base;
+    box-shadow: v.$shadow-lg;
+
+    &.open { left: 0; }
+  }
+
+  .sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 199;
+    top: v.$topbar-height;
+    &.visible { display: block; }
+  }
+}
+
+// ---- Utilidades generales ----
+.hidden   { display: none !important; }
+.sr-only  {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: v.$space-4 0;
+}
+
+.text-muted   { color: var(--text-muted); }
+.text-sm      { font-size: v.$font-size-sm; }
+.font-mono    { font-family: v.$font-mono; }
+
+// ---- Import de fuentes (usadas desde HTML también) ----
+// Las fuentes se cargan desde index.html via Google Fonts
