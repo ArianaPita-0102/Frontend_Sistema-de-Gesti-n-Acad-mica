@@ -1,0 +1,22 @@
+{
+  "estudiantes": [
+    { "id": 1, "nombre": "Ana Lucía Flores",     "correo": "ana.flores@ucb.edu.bo",   "edad": 20, "carrera": "Ingeniería de Sistemas", "estado": "activo" },
+    { "id": 2, "nombre": "Carlos Mendoza",        "correo": "carlos.m@ucb.edu.bo",     "edad": 22, "carrera": "Ingeniería Industrial",   "estado": "activo" },
+    { "id": 3, "nombre": "Valeria Quispe",        "correo": "v.quispe@ucb.edu.bo",     "edad": 19, "carrera": "Administración",           "estado": "activo" },
+    { "id": 4, "nombre": "Diego Arroyo",          "correo": "d.arroyo@ucb.edu.bo",     "edad": 21, "carrera": "Ingeniería de Sistemas",   "estado": "inactivo" },
+    { "id": 5, "nombre": "Sofía Montaño",         "correo": "sofia.m@ucb.edu.bo",      "edad": 23, "carrera": "Contaduría Pública",       "estado": "activo" }
+  ],
+  "cursos": [
+    { "id": 1, "nombre": "Programación Avanzada", "sigla": "SI-301", "docente": "Ing. Mauricio Quezada", "cupoMaximo": 30, "estado": "disponible" },
+    { "id": 2, "nombre": "Base de Datos II",      "sigla": "SI-402", "docente": "Ing. Patricia Salinas", "cupoMaximo": 25, "estado": "disponible" },
+    { "id": 3, "nombre": "Redes de Computadoras", "sigla": "SI-305", "docente": "Ing. Roberto Chávez",   "cupoMaximo": 20, "estado": "cerrado"    },
+    { "id": 4, "nombre": "Cálculo I",             "sigla": "MA-101", "docente": "Lic. Gloria Pinto",     "cupoMaximo": 40, "estado": "disponible" }
+  ],
+  "inscripciones": [
+    { "id": 1, "estudianteId": 1, "cursoId": 1, "fecha": "2025-03-01", "estado": "activa" },
+    { "id": 2, "estudianteId": 1, "cursoId": 2, "fecha": "2025-03-01", "estado": "activa" },
+    { "id": 3, "estudianteId": 2, "cursoId": 1, "fecha": "2025-03-02", "estado": "activa" },
+    { "id": 4, "estudianteId": 3, "cursoId": 1, "fecha": "2025-03-03", "estado": "activa" },
+    { "id": 5, "estudianteId": 5, "cursoId": 4, "fecha": "2025-03-04", "estado": "activa" }
+  ]
+}

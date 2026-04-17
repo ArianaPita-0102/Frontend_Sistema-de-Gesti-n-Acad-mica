@@ -1,7 +1,7 @@
 // ============================================================
 // ui/render.inscripciones.ts — Renderizado de inscripciones y relaciones
 // ============================================================
-import { Inscripcion } from "../models/inscripcion.js";
+// Inscripcion type used indirectly via svcI methods
 import { EstudianteService } from "../services/estudiante.service.js";
 import { CursoService } from "../services/curso.service.js";
 import { InscripcionService } from "../services/inscripcion.service.js";
@@ -48,11 +48,9 @@ function populateSelects(svcE: EstudianteService, svcC: CursoService): void {
   const disponibles = svcC.getByEstado("disponible");
   selCur.innerHTML = `<option value="">— Selecciona curso —</option>` +
     disponibles.map((c) => {
-      const inscritos = 0; // will be shown in label
       return `<option value="${c.id}">${escHtml(c.sigla)} — ${escHtml(c.nombre)}</option>`;
     }).join("");
 
-  void inscritos; // suppress unused var
 }
 
 function handleSubmitInscripcion(svcI: InscripcionService): void {
@@ -270,6 +268,3 @@ function renderEstudiantesEnCurso(
 function escHtml(str: string): string {
   return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
-
-// suppress unused variable
-declare const inscritos: never;

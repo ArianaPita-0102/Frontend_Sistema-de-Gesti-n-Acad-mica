@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistema de Gestión Académica — UCB San Pablo</title>
+
+    <!-- Google Fonts: Playfair Display + DM Sans + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos compilados desde SCSS -->
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <!-- ================================================================
+     ESTRUCTURA PRINCIPAL DE LA APP
+     ================================================================ -->
+    <div class="app-wrapper">
+      <!-- ---- Topbar ---- -->
+      <header class="topbar">
+        <div class="topbar__brand">
+          <!-- Hamburger (mobile) -->
+          <button
+            id="btn-menu"
+            class="btn btn--ghost btn--icon"
+            style="display: none"
+            aria-label="Abrir menú"
+          >
+            ☰
+          </button>
+          <div class="brand-logo">🎓</div>
+          <div>
+            <span class="brand-text">SGA</span>
+            <span class="brand-sub">Gestión Académica</span>
+          </div>
+        </div>
+
+        <div class="topbar__actions">
+          <!-- Exportar / Importar -->
+          <button
+            id="btn-export"
+            class="btn btn--secondary btn--sm"
+            title="Exportar datos a JSON"
+          >
+            ⬇ Exportar
+          </button>
+          <button
+            id="btn-import"
+            class="btn btn--secondary btn--sm"
+            title="Importar datos desde JSON"
+          >
+            ⬆ Importar
+          </button>
+          <input
+            type="file"
+            id="input-import"
+            accept=".json"
+            class="hidden"
+            aria-label="Importar archivo JSON"
+          />
+
+          <!-- Dark mode toggle -->
+          <button
+            id="btn-dark-mode"
+            class="dark-toggle"
+            title="Alternar modo oscuro"
+            aria-label="Modo oscuro"
+          ></button>
+        </div>
+      </header>
+
+      <!-- ---- Body (sidebar + main) ---- -->
+      <div class="app-body">
+        <!-- Sidebar backdrop (mobile) -->
+        <div class="sidebar-backdrop"></div>
+
+        <!-- ---- Sidebar Navigation ---- -->
+        <nav class="sidebar" aria-label="Navegación principal">
+          <div class="sidebar__nav">
+            <div class="sidebar__section-label">Principal</div>
+            <button class="nav-item active" data-section="section-dashboard">
+              <span class="nav-icon">📊</span> Dashboard
+            </button>
+
+            <div class="sidebar__section-label" style="margin-top: 12px">
+              Gestión
+            </div>
+            <button class="nav-item" data-section="section-estudiantes">
+              <span class="nav-icon">👤</span> Estudiantes
+            </button>
+            <button class="nav-item" data-section="section-cursos">
+              <span class="nav-icon">📚</span> Cursos
+            </button>
+            <button class="nav-item" data-section="section-inscripciones">
+              <span class="nav-icon">📋</span> Inscripciones
+            </button>
+
+            <div class="sidebar__section-label" style="margin-top: 12px">
+              Vistas
+            </div>
+            <button class="nav-item" data-section="section-relaciones">
+              <span class="nav-icon">🔗</span> Relaciones
+            </button>
+            <button class="nav-item" data-section="section-estadisticas">
+              <span class="nav-icon">📈</span> Estadísticas
+            </button>
+          </div>
+        </nav>
+
+        <!-- ================================================================
+         CONTENIDO PRINCIPAL
+         ================================================================ -->
+        <main class="main-content" id="main-content">
+          <!-- ============================================================
+           SECCIÓN: DASHBOARD
+           ============================================================ -->
+          <section id="section-dashboard" class="page-section active">
+            <div class="page-header">
+              <div>
+                <h1>Dashboard</h1>
+                <p>Resumen general del sistema académico</p>
+              </div>
+            </div>
+
+            <!-- Tarjetas de estadísticas -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--green">👤</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-total-estudiantes">
+                    —
+                  </div>
+                  <div class="stat-card__label">Total Estudiantes</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--blue">📚</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-total-cursos">—</div>
+                  <div class="stat-card__label">Total Cursos</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--teal">📋</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-total-inscripciones">
+                    —
+                  </div>
+                  <div class="stat-card__label">Inscripciones Activas</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--orange">✅</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-estudiantes-activos">
+                    —
+                  </div>
+                  <div class="stat-card__label">Estudiantes Activos</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--red">🔒</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-cursos-cerrados">
+                    —
+                  </div>
+                  <div class="stat-card__label">Cursos Cerrados</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--purple">🏆</div>
+                <div class="stat-card__body">
+                  <div
+                    class="stat-card__value"
+                    id="stat-top-curso"
+                    style="font-size: 1.1rem"
+                  >
+                    —
+                  </div>
+                  <div class="stat-card__label">Curso más popular</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Banner curso top -->
+            <div id="top-course-banner" class="top-course-banner hidden">
+              <div class="top-course-banner__emoji">🏆</div>
+              <div>
+                <div class="top-course-banner__label">
+                  Curso con más inscritos
+                </div>
+                <div class="top-course-banner__name" id="top-course-name">
+                  —
+                </div>
+                <div class="top-course-banner__count" id="top-course-count">
+                  —
+                </div>
+              </div>
+            </div>
+
+            <!-- Ocupación por curso -->
+            <div class="card" style="margin-top: 1.5rem">
+              <div class="card__header">
+                <h2 class="card__title">Ocupación por Curso</h2>
+              </div>
+              <div id="cursos-ocupacion-list"></div>
+            </div>
+          </section>
+
+          <!-- ============================================================
+           SECCIÓN: ESTUDIANTES
+           ============================================================ -->
+          <section id="section-estudiantes" class="page-section">
+            <div class="page-header">
+              <div>
+                <h1>Estudiantes</h1>
+                <p>Gestiona el registro de estudiantes</p>
+              </div>
+              <button id="btn-nuevo-estudiante" class="btn btn--primary">
+                + Nuevo Estudiante
+              </button>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+              <div class="toolbar__left">
+                <div class="search-input-wrapper">
+                  <span class="search-icon">🔍</span>
+                  <input
+                    type="search"
+                    id="search-estudiante"
+                    placeholder="Buscar por nombre…"
+                    aria-label="Buscar estudiante"
+                  />
+                </div>
+                <select
+                  id="filter-estado-estudiante"
+                  class="filter-select"
+                  aria-label="Filtrar por estado"
+                >
+                  <option value="todos">Todos los estados</option>
+                  <option value="activo">Activos</option>
+                  <option value="inactivo">Inactivos</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-wrapper">
+              <table class="table" aria-label="Lista de estudiantes">
+                <thead>
+                  <tr id="tabla-estudiantes">
+                    <th data-col="id">ID <span class="sort-icon">↕</span></th>
+                    <th data-col="nombre">
+                      Nombre <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="correo">
+                      Correo <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="edad">
+                      Edad <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="carrera">
+                      Carrera <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="estado">
+                      Estado <span class="sort-icon">↕</span>
+                    </th>
+                    <th>Cursos</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-estudiantes"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ============================================================
+           SECCIÓN: CURSOS
+           ============================================================ -->
+          <section id="section-cursos" class="page-section">
+            <div class="page-header">
+              <div>
+                <h1>Cursos</h1>
+                <p>Gestiona la oferta académica</p>
+              </div>
+              <button id="btn-nuevo-curso" class="btn btn--primary">
+                + Nuevo Curso
+              </button>
+            </div>
+
+            <div class="toolbar">
+              <div class="toolbar__left">
+                <div class="search-input-wrapper">
+                  <span class="search-icon">🔍</span>
+                  <input
+                    type="search"
+                    id="search-curso"
+                    placeholder="Buscar por nombre o sigla…"
+                    aria-label="Buscar curso"
+                  />
+                </div>
+                <select
+                  id="filter-estado-curso"
+                  class="filter-select"
+                  aria-label="Filtrar por estado"
+                >
+                  <option value="todos">Todos los estados</option>
+                  <option value="disponible">Disponibles</option>
+                  <option value="cerrado">Cerrados</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table" aria-label="Lista de cursos">
+                <thead>
+                  <tr id="tabla-cursos">
+                    <th data-col="id">ID <span class="sort-icon">↕</span></th>
+                    <th data-col="nombre">
+                      Nombre <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="sigla">
+                      Sigla <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="docente">
+                      Docente <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="cupoMaximo">
+                      Cupo <span class="sort-icon">↕</span>
+                    </th>
+                    <th data-col="estado">
+                      Estado <span class="sort-icon">↕</span>
+                    </th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-cursos"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ============================================================
+           SECCIÓN: INSCRIPCIONES
+           ============================================================ -->
+          <section id="section-inscripciones" class="page-section">
+            <div class="page-header">
+              <div>
+                <h1>Inscripciones</h1>
+                <p>Gestiona las inscripciones de estudiantes a cursos</p>
+              </div>
+              <button id="btn-nueva-inscripcion" class="btn btn--primary">
+                + Nueva Inscripción
+              </button>
+            </div>
+
+            <div class="table-wrapper">
+              <table class="table" aria-label="Lista de inscripciones">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Estudiante</th>
+                    <th>Curso</th>
+                    <th>Sigla</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-inscripciones"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- ============================================================
+           SECCIÓN: RELACIONES
+           ============================================================ -->
+          <section id="section-relaciones" class="page-section">
+            <div class="page-header">
+              <div>
+                <h1>Relaciones</h1>
+                <p>Visualiza vínculos entre estudiantes y cursos</p>
+              </div>
+            </div>
+
+            <div class="relations-grid">
+              <!-- Panel: cursos de un estudiante -->
+              <div class="relation-panel">
+                <div class="relation-panel__title">
+                  📚 Cursos de un Estudiante
+                </div>
+                <select
+                  id="rel-select-estudiante"
+                  aria-label="Seleccionar estudiante"
+                >
+                  <option value="">— Selecciona un estudiante —</option>
+                </select>
+                <ul class="relation-list" id="rel-cursos-de-estudiante"></ul>
+              </div>
+
+              <!-- Panel: estudiantes en un curso -->
+              <div class="relation-panel">
+                <div class="relation-panel__title">
+                  👥 Estudiantes en un Curso
+                </div>
+                <select id="rel-select-curso" aria-label="Seleccionar curso">
+                  <option value="">— Selecciona un curso —</option>
+                </select>
+                <ul class="relation-list" id="rel-estudiantes-en-curso"></ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- ============================================================
+           SECCIÓN: ESTADÍSTICAS DETALLADAS
+           ============================================================ -->
+          <section id="section-estadisticas" class="page-section">
+            <div class="page-header">
+              <div>
+                <h1>Estadísticas</h1>
+                <p>Análisis detallado del sistema</p>
+              </div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--green">👤</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-total-estudiantes">
+                    —
+                  </div>
+                  <div class="stat-card__label">Total Estudiantes</div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--orange">✅</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-estudiantes-activos">
+                    —
+                  </div>
+                  <div class="stat-card__label">Estudiantes Activos</div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--blue">📚</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-total-cursos">—</div>
+                  <div class="stat-card__label">Total Cursos</div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--red">🔒</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-cursos-cerrados">
+                    —
+                  </div>
+                  <div class="stat-card__label">Cursos Cerrados</div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--teal">📋</div>
+                <div class="stat-card__body">
+                  <div class="stat-card__value" id="stat-total-inscripciones">
+                    —
+                  </div>
+                  <div class="stat-card__label">Inscripciones Activas</div>
+                </div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-card__icon stat-card__icon--purple">🏆</div>
+                <div class="stat-card__body">
+                  <div
+                    class="stat-card__value"
+                    id="stat-top-curso"
+                    style="font-size: 1rem"
+                  >
+                    —
+                  </div>
+                  <div class="stat-card__label">Curso más popular</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem">
+              <div class="card__header">
+                <h2 class="card__title">Ocupación por Curso</h2>
+              </div>
+              <div id="cursos-ocupacion-list"></div>
+            </div>
+          </section>
+        </main>
+        <!-- /main-content -->
+      </div>
+      <!-- /app-body -->
+    </div>
+    <!-- /app-wrapper -->
+
+    <!-- Toast container -->
+    <div class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ================================================================
+     MODALES
+     ================================================================ -->
+
+    <!-- Modal: Estudiante (crear/editar) -->
+    <div
+      id="modal-estudiante"
+      class="modal-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-estudiante-title"
+    >
+      <div class="modal">
+        <div class="modal__header">
+          <h2 class="modal__title" id="modal-estudiante-title">
+            Nuevo Estudiante
+          </h2>
+          <button
+            class="btn btn--ghost btn--icon"
+            id="btn-cancel-estudiante"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal__body">
+          <form id="form-estudiante" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="est-nombre">Nombre completo *</label>
+                <input
+                  type="text"
+                  id="est-nombre"
+                  placeholder="Ej: Ana Lucía Flores"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+              <div class="form-group">
+                <label for="est-correo">Correo electrónico *</label>
+                <input
+                  type="email"
+                  id="est-correo"
+                  placeholder="nombre@ucb.edu.bo"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="est-edad">Edad *</label>
+                <input
+                  type="number"
+                  id="est-edad"
+                  placeholder="Ej: 20"
+                  min="14"
+                  max="100"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="est-estado">Estado *</label>
+                <select id="est-estado" required>
+                  <option value="activo">Activo</option>
+                  <option value="inactivo">Inactivo</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="est-carrera">Carrera *</label>
+              <input
+                type="text"
+                id="est-carrera"
+                placeholder="Ej: Ingeniería de Sistemas"
+                required
+                autocomplete="off"
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal__footer">
+          <button
+            type="button"
+            class="btn btn--secondary"
+            id="btn-cancel-estudiante-footer"
+            onclick="
+              document
+                .getElementById('modal-estudiante')
+                .classList.add('hidden');
+              document.body.style.overflow = '';
+            "
+          >
+            Cancelar
+          </button>
+          <button type="submit" form="form-estudiante" class="btn btn--primary">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Curso (crear/editar) -->
+    <div
+      id="modal-curso"
+      class="modal-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-curso-title"
+    >
+      <div class="modal">
+        <div class="modal__header">
+          <h2 class="modal__title" id="modal-curso-title">Nuevo Curso</h2>
+          <button
+            class="btn btn--ghost btn--icon"
+            id="btn-cancel-curso"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal__body">
+          <form id="form-curso" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cur-nombre">Nombre del curso *</label>
+                <input
+                  type="text"
+                  id="cur-nombre"
+                  placeholder="Ej: Programación Avanzada"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+              <div class="form-group">
+                <label for="cur-sigla">Sigla *</label>
+                <input
+                  type="text"
+                  id="cur-sigla"
+                  placeholder="Ej: SI-301"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cur-docente">Docente *</label>
+              <input
+                type="text"
+                id="cur-docente"
+                placeholder="Ej: Ing. Mauricio Quezada"
+                required
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cur-cupo">Cupo máximo *</label>
+                <input
+                  type="number"
+                  id="cur-cupo"
+                  placeholder="Ej: 30"
+                  min="1"
+                  max="500"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="cur-estado">Estado *</label>
+                <select id="cur-estado" required>
+                  <option value="disponible">Disponible</option>
+                  <option value="cerrado">Cerrado</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal__footer">
+          <button
+            type="button"
+            class="btn btn--secondary"
+            id="btn-cancel-curso-footer"
+            onclick="
+              document.getElementById('modal-curso').classList.add('hidden');
+              document.body.style.overflow = '';
+            "
+          >
+            Cancelar
+          </button>
+          <button type="submit" form="form-curso" class="btn btn--primary">
+            Guardar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Inscripción -->
+    <div
+      id="modal-inscripcion"
+      class="modal-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-inscripcion-title"
+    >
+      <div class="modal">
+        <div class="modal__header">
+          <h2 class="modal__title" id="modal-inscripcion-title">
+            Nueva Inscripción
+          </h2>
+          <button
+            class="btn btn--ghost btn--icon"
+            id="btn-cancel-inscripcion"
+            aria-label="Cerrar"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="modal__body">
+          <form id="form-inscripcion" novalidate>
+            <div class="form-group">
+              <label for="ins-estudiante">Estudiante activo *</label>
+              <select id="ins-estudiante" required>
+                <option value="">— Selecciona estudiante —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ins-curso">Curso disponible *</label>
+              <select id="ins-curso" required>
+                <option value="">— Selecciona curso —</option>
+              </select>
+            </div>
+            <p
+              style="
+                font-size: 0.8125rem;
+                color: var(--text-muted);
+                margin-top: 0.5rem;
+              "
+            >
+              Solo se muestran estudiantes activos y cursos disponibles. Se
+              verificará que no existan duplicados y que haya cupo disponible.
+            </p>
+          </form>
+        </div>
+        <div class="modal__footer">
+          <button
+            type="button"
+            class="btn btn--secondary"
+            id="btn-cancel-inscripcion-footer"
+            onclick="
+              document
+                .getElementById('modal-inscripcion')
+                .classList.add('hidden');
+              document.body.style.overflow = '';
+            "
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            form="form-inscripcion"
+            class="btn btn--primary"
+          >
+            Inscribir
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================
+     SCRIPT — TypeScript compilado como módulo ES
+     ================================================================ -->
+    <script type="module" src="./dist/app.js"></script>
+
+    <!-- Script inline para mostrar hamburguesa en mobile -->
+    <script>
+      (function () {
+        if (window.innerWidth <= 1024) {
+          document.getElementById("btn-menu").style.display = "flex";
+        }
+        window.addEventListener("resize", function () {
+          const btn = document.getElementById("btn-menu");
+          if (btn)
+            btn.style.display = window.innerWidth <= 1024 ? "flex" : "none";
+        });
+      })();
+    </script>
+  </body>
+</html>

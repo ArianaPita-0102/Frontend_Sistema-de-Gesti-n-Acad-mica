@@ -1,0 +1,10 @@
+type ToastType = "success" | "error" | "warning" | "info";
+export declare function showToast(message: string, type?: ToastType, duration?: number): void;
+export declare function openModal(modalId: string): void;
+export declare function closeModal(modalId: string): void;
+export declare function showConfirm(title: string, message: string, onConfirm: () => void, onCancel?: () => void): void;
+export declare function showSection(sectionId: string): void;
+export declare function setBadge(navSection: string, count: number): void;
+export declare function toggleDarkMode(): boolean;
+export declare function loadDarkMode(): void;
+export {};
