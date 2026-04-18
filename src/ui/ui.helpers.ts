@@ -1,16 +1,10 @@
-// ============================================================
-// ui/ui.helpers.ts — Componentes de UI reutilizables
-// ============================================================
-
-// ---- Toast notifications ----
-
 type ToastType = "success" | "error" | "warning" | "info";
 
 const TOAST_ICONS: Record<ToastType, string> = {
-  success: "✅",
-  error:   "❌",
-  warning: "⚠️",
-  info:    "ℹ️",
+  success: " ",
+  error:   " ",
+  warning: " ",
+  info:    " ",
 };
 
 let toastContainer: HTMLElement | null = null;
@@ -37,7 +31,6 @@ export function showToast(message: string, type: ToastType = "info", duration = 
   `;
   container.appendChild(toast);
 
-  // Auto-remove
   setTimeout(() => {
     toast.style.opacity = "0";
     toast.style.transform = "translateX(16px)";
@@ -46,14 +39,11 @@ export function showToast(message: string, type: ToastType = "info", duration = 
   }, duration);
 }
 
-// ---- Modal ----
-
 export function openModal(modalId: string): void {
   const overlay = document.getElementById(modalId);
   overlay?.classList.remove("hidden");
   document.body.style.overflow = "hidden";
 
-  // Focus first input
   setTimeout(() => {
     const first = overlay?.querySelector<HTMLInputElement>(
       "input:not([type=hidden]), select, textarea"
@@ -67,15 +57,12 @@ export function closeModal(modalId: string): void {
   document.body.style.overflow = "";
 }
 
-// ---- Confirm Dialog ----
-
 export function showConfirm(
   title: string,
   message: string,
   onConfirm: () => void,
   onCancel?: () => void
 ): void {
-  // Remove any existing confirm
   document.getElementById("confirm-overlay")?.remove();
 
   const overlay = document.createElement("div");
@@ -83,7 +70,7 @@ export function showConfirm(
   overlay.className = "modal-overlay";
   overlay.innerHTML = `
     <div class="confirm-dialog">
-      <div class="confirm-dialog__icon">⚠️</div>
+      <div class="confirm-dialog__icon"> </div>
       <div class="confirm-dialog__title">${escHtml(title)}</div>
       <p class="confirm-dialog__msg">${escHtml(message)}</p>
       <div class="confirm-dialog__actions">
@@ -113,8 +100,6 @@ export function showConfirm(
   });
 }
 
-// ---- Nav / Sections ----
-
 export function showSection(sectionId: string): void {
   document.querySelectorAll(".page-section").forEach((s) => {
     s.classList.toggle("active", s.id === sectionId);
@@ -125,16 +110,12 @@ export function showSection(sectionId: string): void {
   });
 }
 
-// ---- Badge counter on nav ----
-
 export function setBadge(navSection: string, count: number): void {
   const el = document.querySelector<HTMLElement>(`[data-section="${navSection}"] .nav-badge`);
   if (!el) return;
   el.textContent = String(count);
   el.style.display = count > 0 ? "inline-flex" : "none";
 }
-
-// ---- Dark mode ----
 
 export function toggleDarkMode(): boolean {
   const isDark = document.documentElement.classList.toggle("dark-mode");
@@ -148,7 +129,6 @@ export function loadDarkMode(): void {
   }
 }
 
-// ---- Escape helper ----
 function escHtml(str: string): string {
   return str
     .replace(/&/g, "&amp;")

@@ -1,6 +1,4 @@
-// ============================================================
-// ui/render.cursos.ts — Renderizado de la sección Cursos
-// ============================================================
+
 import { Curso } from "../models/curso.js";
 import { CursoService } from "../services/curso.service.js";
 import { InscripcionService } from "../services/inscripcion.service.js";

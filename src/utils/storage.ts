@@ -1,6 +1,3 @@
-// ============================================================
-// utils/storage.ts — Capa de abstracción sobre localStorage
-// ============================================================
 
 /**
  * Guarda un valor serializado en localStorage.
@@ -15,10 +12,6 @@ export function saveToStorage<T>(key: string, value: T): void {
   }
 }
 
-/**
- * Recupera y deserializa un valor de localStorage.
- * Retorna `null` si la clave no existe o hay error de parseo.
- */
 export function loadFromStorage<T>(key: string): T | null {
   try {
     const raw = localStorage.getItem(key);
@@ -30,16 +23,10 @@ export function loadFromStorage<T>(key: string): T | null {
   }
 }
 
-/**
- * Elimina una clave del localStorage.
- */
 export function removeFromStorage(key: string): void {
   localStorage.removeItem(key);
 }
 
-/**
- * Exporta todos los datos del sistema como un objeto JSON descargable.
- */
 export function exportAllData(
   students: unknown,
   courses: unknown,
@@ -63,10 +50,6 @@ export function exportAllData(
   URL.revokeObjectURL(url);
 }
 
-/**
- * Lee un archivo JSON subido por el usuario.
- * Retorna el objeto parseado o lanza un error.
- */
 export async function importFromFile(file: File): Promise<unknown> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();

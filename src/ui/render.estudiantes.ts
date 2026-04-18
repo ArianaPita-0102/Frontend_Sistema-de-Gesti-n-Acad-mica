@@ -1,6 +1,4 @@
-// ============================================================
-// ui/render.estudiantes.ts — Renderizado de la sección Estudiantes
-// ============================================================
+
 import { Estudiante } from "../models/estudiante.js";
 import { EstudianteService } from "../services/estudiante.service.js";
 import { InscripcionService } from "../services/inscripcion.service.js";
@@ -20,7 +18,7 @@ export function initEstudiantesUI(
   svcE: EstudianteService,
   svcI: InscripcionService
 ): void {
-  // ---- Botón Nuevo ----
+
   document.getElementById("btn-nuevo-estudiante")?.addEventListener("click", () => {
     editingId = null;
     resetForm("form-estudiante");
@@ -28,13 +26,12 @@ export function initEstudiantesUI(
     openModal("modal-estudiante");
   });
 
-  // ---- Formulario submit ----
+
   document.getElementById("form-estudiante")?.addEventListener("submit", (e) => {
     e.preventDefault();
     handleSubmitEstudiante(svcE);
   });
 
-  // ---- Cancelar modal ----
   document.getElementById("btn-cancel-estudiante")?.addEventListener("click", () => {
     closeModal("modal-estudiante");
   });
@@ -42,7 +39,6 @@ export function initEstudiantesUI(
     if ((e.target as HTMLElement).id === "modal-estudiante") closeModal("modal-estudiante");
   });
 
-  // ---- Búsqueda y filtros ----
   document.getElementById("search-estudiante")?.addEventListener("input", (e) => {
     currentQuery = (e.target as HTMLInputElement).value;
     renderTablaEstudiantes(svcE, svcI);
@@ -53,7 +49,7 @@ export function initEstudiantesUI(
     renderTablaEstudiantes(svcE, svcI);
   });
 
-  // ---- Ordenamiento ----
+ 
   document.querySelectorAll("#tabla-estudiantes th[data-col]").forEach((th) => {
     th.addEventListener("click", () => {
       const col = (th as HTMLElement).dataset["col"] as SortKey;
@@ -103,7 +99,7 @@ function handleSubmitEstudiante(svcE: EstudianteService): void {
       showToast("Estudiante registrado correctamente.", "success");
     }
     closeModal("modal-estudiante");
-    // dispara re-render global
+ 
     document.dispatchEvent(new CustomEvent("sga:data-changed"));
   } catch (err) {
     showToast((err as Error).message, "error");
@@ -119,7 +115,7 @@ export function renderTablaEstudiantes(
 
   let data = svcE.filter(currentQuery, currentEstado);
 
-  // Ordenar
+
   data = [...data].sort((a, b) => {
     const av = a[sortKey];
     const bv = b[sortKey];
@@ -131,7 +127,6 @@ export function renderTablaEstudiantes(
       : String(bv).localeCompare(String(av));
   });
 
-  // Actualizar iconos de sort
   document.querySelectorAll("#tabla-estudiantes th[data-col]").forEach((th) => {
     const col = (th as HTMLElement).dataset["col"];
     const icon = th.querySelector(".sort-icon");
@@ -180,7 +175,6 @@ export function renderTablaEstudiantes(
     })
     .join("");
 
-  // Bind table actions (event delegation)
   tbody.querySelectorAll("[data-action]").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const el = e.currentTarget as HTMLElement;
@@ -239,7 +233,7 @@ function handleDeleteEstudiante(
   );
 }
 
-// ---- Helpers ----
+
 
 function getVal(id: string): string {
   return (document.getElementById(id) as HTMLInputElement)?.value ?? "";
@@ -269,5 +263,5 @@ function escHtml(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
-// re-export for badge counter
+
 export { setBadge };

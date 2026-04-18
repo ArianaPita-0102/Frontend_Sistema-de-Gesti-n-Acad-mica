@@ -1,6 +1,4 @@
-// ============================================================
-// services/inscripcion.service.ts — CRUD y reglas de negocio
-// ============================================================
+
 import { Inscripcion, InscripcionDTO } from "../models/inscripcion.js";
 import { EstudianteService } from "./estudiante.service.js";
 import { CursoService } from "./curso.service.js";
@@ -19,8 +17,7 @@ export class InscripcionService {
     this.load();
   }
 
-  // ---- Persistencia ----
-
+ 
   private load(): void {
     const data = loadFromStorage<Inscripcion[]>(STORAGE_KEY);
     if (data && Array.isArray(data)) {
@@ -35,7 +32,6 @@ export class InscripcionService {
     saveToStorage(STORAGE_KEY, this.inscripciones);
   }
 
-  // ---- Consultas ----
 
   getAll(): Inscripcion[] {
     return [...this.inscripciones];
@@ -45,31 +41,25 @@ export class InscripcionService {
     return this.inscripciones.find((i) => i.id === id);
   }
 
-  /** Retorna todas las inscripciones de un estudiante */
+ 
   getByEstudiante(estudianteId: number): Inscripcion[] {
     return this.inscripciones.filter(
       (i) => i.estudianteId === estudianteId && i.estado === "activa"
     );
   }
 
-  /** Retorna todas las inscripciones de un curso */
+
   getByCurso(cursoId: number): Inscripcion[] {
     return this.inscripciones.filter(
       (i) => i.cursoId === cursoId && i.estado === "activa"
     );
   }
 
-  /** Cuenta inscripciones activas en un curso */
+  
   countActivasByCurso(cursoId: number): number {
     return this.getByCurso(cursoId).length;
   }
 
-  // ---- Mutaciones ----
-
-  /**
-   * Inscribe un estudiante en un curso, aplicando todas las reglas de negocio.
-   * @throws Error descriptivo para cada regla violada
-   */
   inscribir(dto: InscripcionDTO): Inscripcion {
     const estudiante = this.estudianteService.getById(dto.estudianteId);
     if (!estudiante) {
@@ -91,7 +81,7 @@ export class InscripcionService {
       );
     }
 
-    // Verificar duplicado
+  
     const yaInscrito = this.inscripciones.find(
       (i) =>
         i.estudianteId === dto.estudianteId &&
@@ -104,7 +94,7 @@ export class InscripcionService {
       );
     }
 
-    // Verificar cupo
+   
     const inscritos = this.countActivasByCurso(dto.cursoId);
     if (inscritos >= curso.cupoMaximo) {
       throw new Error(
@@ -124,7 +114,7 @@ export class InscripcionService {
     return nueva;
   }
 
-  /** Cancela una inscripción activa */
+  
   cancelar(id: number): Inscripcion {
     const ins = this.inscripciones.find((i) => i.id === id);
     if (!ins) throw new Error(`Inscripción con id ${id} no encontrada.`);
@@ -133,7 +123,7 @@ export class InscripcionService {
     return { ...ins };
   }
 
-  /** Elimina definitivamente una inscripción */
+  
   delete(id: number): void {
     const idx = this.inscripciones.findIndex((i) => i.id === id);
     if (idx === -1) throw new Error(`Inscripción con id ${id} no encontrada.`);
@@ -141,10 +131,6 @@ export class InscripcionService {
     this.save();
   }
 
-  /**
-   * Elimina todas las inscripciones de un estudiante.
-   * Usado al eliminar un estudiante.
-   */
   deleteByEstudiante(estudianteId: number): void {
     this.inscripciones = this.inscripciones.filter(
       (i) => i.estudianteId !== estudianteId
@@ -152,10 +138,6 @@ export class InscripcionService {
     this.save();
   }
 
-  /**
-   * Elimina todas las inscripciones de un curso.
-   * Usado al eliminar un curso.
-   */
   deleteByCurso(cursoId: number): void {
     this.inscripciones = this.inscripciones.filter(
       (i) => i.cursoId !== cursoId
@@ -163,15 +145,10 @@ export class InscripcionService {
     this.save();
   }
 
-  // ---- Estadísticas ----
-
   countTotal(): number {
     return this.inscripciones.filter((i) => i.estado === "activa").length;
   }
 
-  /**
-   * Retorna { cursoId, count } del curso con más inscripciones activas.
-   */
   topCurso(): { cursoId: number; count: number } | null {
     const activas = this.inscripciones.filter((i) => i.estado === "activa");
     if (activas.length === 0) return null;
@@ -192,8 +169,6 @@ export class InscripcionService {
 
     return topId === -1 ? null : { cursoId: topId, count: topCount };
   }
-
-  // ---- Import ----
 
   importData(data: Inscripcion[]): void {
     this.inscripciones = data;

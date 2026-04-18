@@ -1,6 +1,4 @@
-// ============================================================
-// ui/render.dashboard.ts — Dashboard y estadísticas
-// ============================================================
+
 import { EstudianteService } from "../services/estudiante.service.js";
 import { CursoService } from "../services/curso.service.js";
 import { InscripcionService } from "../services/inscripcion.service.js";
@@ -10,14 +8,13 @@ export function renderDashboard(
   svcC: CursoService,
   svcI: InscripcionService
 ): void {
-  // ---- Totales ----
+
   setText("stat-total-estudiantes", svcE.countTotal());
   setText("stat-total-cursos",      svcC.countTotal());
   setText("stat-total-inscripciones", svcI.countTotal());
   setText("stat-estudiantes-activos", svcE.countActivos());
   setText("stat-cursos-cerrados",   svcC.countCerrados());
 
-  // ---- Curso más popular ----
   const top = svcI.topCurso();
   const topEl = document.getElementById("stat-top-curso");
   const banner = document.getElementById("top-course-banner");
@@ -37,7 +34,6 @@ export function renderDashboard(
     if (topEl) topEl.textContent = "—";
   }
 
-  // ---- Barra de ocupación por curso ----
   renderOcupacionCursos(svcC, svcI);
 }
 

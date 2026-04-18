@@ -1,7 +1,4 @@
-// ============================================================
-// ui/render.inscripciones.ts — Renderizado de inscripciones y relaciones
-// ============================================================
-// Inscripcion type used indirectly via svcI methods
+
 import { EstudianteService } from "../services/estudiante.service.js";
 import { CursoService } from "../services/curso.service.js";
 import { InscripcionService } from "../services/inscripcion.service.js";
@@ -153,14 +150,14 @@ function handleDeleteInscripcion(id: number, svcI: InscripcionService): void {
   );
 }
 
-// ---- Sección de Relaciones ----
+
 
 export function initRelacionesUI(
   svcE: EstudianteService,
   svcC: CursoService,
   svcI: InscripcionService
 ): void {
-  // Populate selects
+
   const selEstRel = document.getElementById("rel-select-estudiante") as HTMLSelectElement;
   const selCurRel = document.getElementById("rel-select-curso")      as HTMLSelectElement;
 

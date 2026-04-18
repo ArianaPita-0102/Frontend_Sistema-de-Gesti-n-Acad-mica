@@ -1,6 +1,3 @@
-// ============================================================
-// services/curso.service.ts — CRUD y reglas de negocio
-// ============================================================
 import { Curso, EstadoCurso, CursoDTO, CursoUpdate } from "../models/curso.js";
 import { saveToStorage, loadFromStorage } from "../utils/storage.js";
 
@@ -13,8 +10,6 @@ export class CursoService {
   constructor() {
     this.load();
   }
-
-  // ---- Persistencia ----
 
   private load(): void {
     const data = loadFromStorage<Curso[]>(STORAGE_KEY);
@@ -30,8 +25,6 @@ export class CursoService {
     saveToStorage(STORAGE_KEY, this.cursos);
   }
 
-  // ---- Consultas ----
-
   getAll(): Curso[] {
     return [...this.cursos];
   }
@@ -44,7 +37,6 @@ export class CursoService {
     return this.cursos.filter((c) => c.estado === estado);
   }
 
-  /** Búsqueda por nombre o sigla */
   filter(query: string, estado: EstadoCurso | "todos"): Curso[] {
     const q = query.toLowerCase().trim();
     return this.cursos.filter((c) => {
@@ -57,12 +49,6 @@ export class CursoService {
     });
   }
 
-  // ---- Mutaciones ----
-
-  /**
-   * Agrega un nuevo curso.
-   * @throws Error si la sigla ya existe
-   */
   add(dto: CursoDTO): Curso {
     const dup = this.cursos.find(
       (c) => c.sigla.toUpperCase() === dto.sigla.toUpperCase()
@@ -81,10 +67,6 @@ export class CursoService {
     return nuevo;
   }
 
-  /**
-   * Actualiza un curso existente.
-   * @throws Error si no se encuentra o sigla duplicada
-   */
   update(data: CursoUpdate): Curso {
     const idx = this.cursos.findIndex((c) => c.id === data.id);
     if (idx === -1) throw new Error(`Curso con id ${data.id} no encontrado.`);
@@ -122,8 +104,6 @@ export class CursoService {
     return { ...c };
   }
 
-  // ---- Estadísticas ----
-
   countCerrados(): number {
     return this.cursos.filter((c) => c.estado === "cerrado").length;
   }
@@ -131,8 +111,6 @@ export class CursoService {
   countTotal(): number {
     return this.cursos.length;
   }
-
-  // ---- Import ----
 
   importData(data: Curso[]): void {
     this.cursos = data;

@@ -1,6 +1,3 @@
-// ============================================================
-// services/estudiante.service.ts — CRUD y reglas de negocio
-// ============================================================
 import { Estudiante, EstadoEstudiante, EstudianteDTO, EstudianteUpdate } from "../models/estudiante.js";
 import { saveToStorage, loadFromStorage } from "../utils/storage.js";
 
@@ -13,8 +10,6 @@ export class EstudianteService {
   constructor() {
     this.load();
   }
-
-  // ---- Persistencia ----
 
   private load(): void {
     const data = loadFromStorage<Estudiante[]>(STORAGE_KEY);
@@ -30,24 +25,18 @@ export class EstudianteService {
     saveToStorage(STORAGE_KEY, this.estudiantes);
   }
 
-  // ---- Consultas ----
-
-  /** Retorna todos los estudiantes */
   getAll(): Estudiante[] {
     return [...this.estudiantes];
   }
 
-  /** Retorna un estudiante por id, o undefined */
   getById(id: number): Estudiante | undefined {
     return this.estudiantes.find((e) => e.id === id);
   }
 
-  /** Filtra por estado */
   getByEstado(estado: EstadoEstudiante): Estudiante[] {
     return this.estudiantes.filter((e) => e.estado === estado);
   }
 
-  /** Busca por nombre (case-insensitive, parcial) */
   search(query: string): Estudiante[] {
     const q = query.toLowerCase().trim();
     return this.estudiantes.filter((e) =>
@@ -55,7 +44,6 @@ export class EstudianteService {
     );
   }
 
-  /** Filtra y busca combinado */
   filter(query: string, estado: EstadoEstudiante | "todos"): Estudiante[] {
     return this.estudiantes.filter((e) => {
       const matchQuery = query === "" || e.nombre.toLowerCase().includes(query.toLowerCase().trim());
@@ -64,12 +52,6 @@ export class EstudianteService {
     });
   }
 
-  // ---- Mutaciones ----
-
-  /**
-   * Agrega un nuevo estudiante.
-   * @throws Error si el correo ya está registrado
-   */
   add(dto: EstudianteDTO): Estudiante {
     const duplicate = this.estudiantes.find(
       (e) => e.correo.toLowerCase() === dto.correo.toLowerCase()
@@ -84,15 +66,10 @@ export class EstudianteService {
     return nuevo;
   }
 
-  /**
-   * Actualiza los datos de un estudiante existente.
-   * @throws Error si no se encuentra el estudiante
-   */
   update(data: EstudianteUpdate): Estudiante {
     const idx = this.estudiantes.findIndex((e) => e.id === data.id);
     if (idx === -1) throw new Error(`Estudiante con id ${data.id} no encontrado.`);
 
-    // Si cambia el correo, verificar que no esté en uso por otro
     if (data.correo) {
       const dup = this.estudiantes.find(
         (e) => e.correo.toLowerCase() === data.correo!.toLowerCase() && e.id !== data.id
@@ -105,10 +82,6 @@ export class EstudianteService {
     return this.estudiantes[idx];
   }
 
-  /**
-   * Elimina un estudiante por id.
-   * @throws Error si no se encuentra
-   */
   delete(id: number): void {
     const idx = this.estudiantes.findIndex((e) => e.id === id);
     if (idx === -1) throw new Error(`Estudiante con id ${id} no encontrado.`);
@@ -116,7 +89,6 @@ export class EstudianteService {
     this.save();
   }
 
-  /** Cambia el estado activo/inactivo de un estudiante */
   toggleEstado(id: number): Estudiante {
     const e = this.estudiantes.find((s) => s.id === id);
     if (!e) throw new Error(`Estudiante con id ${id} no encontrado.`);
@@ -125,8 +97,6 @@ export class EstudianteService {
     return { ...e };
   }
 
-  // ---- Estadísticas ----
-
   countActivos(): number {
     return this.estudiantes.filter((e) => e.estado === "activo").length;
   }
@@ -134,8 +104,6 @@ export class EstudianteService {
   countTotal(): number {
     return this.estudiantes.length;
   }
-
-  // ---- Import/Export ----
 
   importData(data: Estudiante[]): void {
     this.estudiantes = data;
